@@ -53,9 +53,9 @@ in
           enable = true,
           keymaps = {
             init_selection = "gnn",
-            node_incremental = "grn",
-            scope_incremental = "grc",
-            node_decremental = "grm",
+            node_incremental = "<leader>]",
+            scope_incremental = "<leader><leader>]",
+            node_decremental = "<leader>[",
           },
         }
       }
