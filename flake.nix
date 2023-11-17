@@ -7,6 +7,12 @@
     nmd.url = "sourcehut:~rycee/nmd";
     nmd.flake = false;
 
+    # ML
+    codeium = {
+      url = "github:exafunction/codeium.vim";
+      flake = false;
+    };
+
     # Language server (use master instead of nixpkgs)
     rnix-lsp.url = "github:nix-community/rnix-lsp";
     rnix-lsp.inputs.nixpkgs.follows = "flake-utils";
@@ -327,6 +333,7 @@
               gitsigns.enable = overrideable true;
               gitsigns.codeActions = overrideable true;
             };
+            vim.plenary.enable = true;
           };
         };
 

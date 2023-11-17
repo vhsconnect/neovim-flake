@@ -111,7 +111,7 @@ in
           version = "master";
           src = cfgBuild.rawPlugins.${pname}.src;
           patches = [
-            ../patches/codeium-vim.patch
+            ./patches/codeium.patch
           ];
 
         };
