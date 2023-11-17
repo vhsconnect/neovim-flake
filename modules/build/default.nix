@@ -105,6 +105,16 @@ in
             assert asserts.assertMsg (name != "nvim-treesitter") "Use buildTreesitterPlug for building nvim-treesitter.";
             cfgBuild.rawPlugins.${pname}.src;
         };
+      buildPlugCodeium = name:
+        pkgs.vimUtils.buildVimPlugin rec {
+          pname = name;
+          version = "master";
+          src = cfgBuild.rawPlugins.${pname}.src;
+          patches = [
+            ../patches/codeium-vim.patch
+          ];
+
+        };
 
       # User provided grammars & override the bundled grammars with nvim-treesitter compatible ones
       # Override rather than overriding `treesitter-parsers` and rebuilding neovim-unwrapped
@@ -124,6 +134,8 @@ in
             then
               (if (plug == "nvim-treesitter")
               then treeSitterPlug
+              else if (plug == "codeium")
+              then buildPlugCodeium "codeium"
               else buildPlug plug)
             else plug))
           (filter

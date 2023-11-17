@@ -34,6 +34,15 @@ in
 
     vim.luaConfigRC.lsp-setup = /* lua */ ''
       vim.g.formatsave = ${boolToString cfg.formatOnSave};
+      vim.cmd [[autocmd! CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, { focus = false})]]
+
+      vim.diagnostic.config({
+        underline = true,
+        virtual_text = false,
+        signs = true,
+        update_in_insert = false,
+        severity_sort = false,
+      })
 
       local attach_keymaps = function(client, bufnr)
         local opts = { noremap=true, silent=true }
@@ -51,6 +60,20 @@ in
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C><leader>', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader><leader>s', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader><leader>r', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+        vim.api.nvim_create_autocmd("CursorHold", {
+          buffer = bufnr,
+          callback = function()
+            local opts = {
+              focusable = false,
+              close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+              border = 'rounded',
+              source = 'always',
+              prefix = ' ',
+              scope = 'cursor',
+            }
+            vim.diagnostic.open_float(nil, opts)
+          end
+        })
       end
 
       -- Enable formatting
