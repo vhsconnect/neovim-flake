@@ -7,6 +7,7 @@ let
   modules = [
     ./chatgpt
     ./completion
+    ./codeium
     ./theme
     ./core
     ./basic

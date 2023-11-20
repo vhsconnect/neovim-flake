@@ -1,13 +1,13 @@
-{
-  pkgs,
-  config,
-  lib,
-  ...
+{ pkgs
+, config
+, lib
+, ...
 }:
 with lib;
 with builtins; let
   cfg = config.vim.chatgpt;
-in {
+in
+{
   options.vim.chatgpt = {
     enable = mkEnableOption "Enable ChatGPT.nvim";
     config = mkOption {
@@ -20,7 +20,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    vim.startPlugins = ["nui-nvim" "chatgpt-nvim"];
+    vim.startPlugins = [ "nui-nvim" "chatgpt-nvim" ];
     vim.luaConfigRC.chatgptnvim = nvim.dag.entryAnywhere /* lua */ ''
       require'chatgpt'.setup({ ${cfg.config} })
     '';

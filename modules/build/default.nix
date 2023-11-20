@@ -101,10 +101,9 @@ in
         pkgs.vimUtils.buildVimPlugin rec {
           pname = name;
           version = "master";
-          src =
-            assert asserts.assertMsg (name != "nvim-treesitter") "Use buildTreesitterPlug for building nvim-treesitter.";
-            cfgBuild.rawPlugins.${pname}.src;
+          src = cfgBuild.rawPlugins.${pname}.src;
         };
+
       buildPlugCodeium = name:
         pkgs.vimUtils.buildVimPlugin rec {
           pname = name;
@@ -113,7 +112,6 @@ in
           patches = [
             ./patches/codeium.patch
           ];
-
         };
 
       # User provided grammars & override the bundled grammars with nvim-treesitter compatible ones
@@ -128,28 +126,28 @@ in
       ]);
 
       buildConfigPlugins = plugins:
-        map
-          (plug:
-            (if isString plug
-            then
-              (if (plug == "nvim-treesitter")
-              then treeSitterPlug
-              else if (plug == "codeium")
-              then buildPlugCodeium "codeium"
-              else buildPlug plug)
-            else plug))
-          (filter
-            (f: f != null)
-            plugins);
+        let
+          _plugins = filter (f: f != null) plugins;
+          mapPlugins = f: map f _plugins;
+        in
+        mapPlugins (plug:
+          (if isString plug
+          then
+            (if (plug == "nvim-treesitter")
+            then treeSitterPlug
+            else if (plug == "codeium")
+            then buildPlugCodeium "codeium"
+            else buildPlug plug)
+          else plug));
 
       normalizedPlugins =
+        let mapPlugins = f: map f cfgBuilt.optPlugins;
+        in
         cfgBuilt.startPlugins ++
-        (map
-          (plugin: {
-            inherit plugin;
-            optional = true;
-          })
-          cfgBuilt.optPlugins);
+        (mapPlugins (plugin: {
+          inherit plugin;
+          optional = true;
+        }));
 
       neovimConfig = pkgs.neovimUtils.makeNeovimConfig {
         inherit (cfgBuild) viAlias vimAlias;

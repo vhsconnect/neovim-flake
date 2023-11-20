@@ -7,11 +7,6 @@
     nmd.url = "sourcehut:~rycee/nmd";
     nmd.flake = false;
 
-    # ML
-    codeium = {
-      url = "github:exafunction/codeium.vim";
-      flake = false;
-    };
 
     # Language server (use master instead of nixpkgs)
     rnix-lsp.url = "github:nix-community/rnix-lsp";
@@ -27,6 +22,12 @@
     tidalcycles.inputs.vim-tidal-src.url = "github:tidalcycles/vim-tidal";
 
     ## Plugins (must begin with plugin-)
+
+    # 3rd party LLM Plugins
+    plugin-codeium = {
+      url = "github:exafunction/codeium.vim";
+      flake = false;
+    };
 
     # tresitter plugins
     plugin-nvim-treesitter-context.url = "github:nvim-treesitter/nvim-treesitter-context";
