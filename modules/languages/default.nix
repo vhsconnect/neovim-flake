@@ -13,6 +13,7 @@ in
     ./clang.nix
     ./css.nix
     ./go.nix
+    ./haskell.nix
     ./html.nix
     ./java.nix
     ./kotlin.nix

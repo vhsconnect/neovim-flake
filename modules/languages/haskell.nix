@@ -16,6 +16,23 @@ with builtins; let
       '';
     };
   };
+
+  defaultFormat = "fourmolu";
+  formats = {
+    fourmolu = {
+      package = [ "haskellPackages" "fourmolu" ];
+      nullConfig = /* lua */ ''
+        table.insert(
+          ls_sources,
+          null_ls.builtins.formatting.fourmolu.with({
+             command = "${nvim.languages.commandOptToCmd cfg.format.package "fourmolu"}",
+          })
+        )
+      '';
+    };
+  };
+
+
 in
 {
   options.vim.languages.haskell = {
@@ -28,6 +45,23 @@ in
         default = config.vim.languages.enableTreesitter;
       };
       package = nvim.options.mkGrammarOption pkgs "haskell";
+    };
+
+    format = {
+      enable = mkOption {
+        description = "Enable Haskell formatting";
+        type = types.bool;
+        default = config.vim.languages.enableFormat;
+      };
+      type = mkOption {
+        description = "Haskell formatter to use";
+        type = with types; enum (attrNames formats);
+        default = defaultFormat;
+      };
+      package = nvim.options.mkCommandOption pkgs {
+        description = "Haskell formatter";
+        inherit (formats.${cfg.format.type}) package;
+      };
     };
 
     lsp = {
@@ -52,6 +86,11 @@ in
     (mkIf cfg.treesitter.enable {
       vim.treesitter.enable = true;
       vim.treesitter.grammars = [ cfg.treesitter.package ];
+    })
+
+    (mkIf cfg.format.enable {
+      vim.lsp.null-ls.enable = true;
+      vim.lsp.null-ls.sources.haskell-format = formats.${cfg.format.type}.nullConfig;
     })
 
     (mkIf cfg.lsp.enable {
