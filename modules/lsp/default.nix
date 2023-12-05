@@ -34,7 +34,7 @@ in
 
     vim.luaConfigRC.lsp-setup = /* lua */ ''
       vim.g.formatsave = ${boolToString cfg.formatOnSave};
-      vim.cmd [[autocmd! CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, { focus = false})]]
+      -- vim.cmd [[autocmd! CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, { focus = false})]]
 
       vim.diagnostic.config({
         underline = true,
@@ -52,6 +52,7 @@ in
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader><leader>t', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader><leader>gn', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader><leader>p', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '"', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
 
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lwa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lwr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
@@ -71,7 +72,7 @@ in
               prefix = ' ',
               scope = 'cursor',
             }
-            vim.diagnostic.open_float(nil, opts)
+            -- vim.diagnostic.open_float(nil, opts)
           end
         })
       end
