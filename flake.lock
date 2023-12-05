@@ -288,6 +288,22 @@
         "type": "github"
       }
     },
+    "plugin-codeium": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1701717791,
+        "narHash": "sha256-r1wmMWwig1Y6hIWqvp4d7Ei47nG8mZ1XDRnnyYt5Bpo=",
+        "owner": "exafunction",
+        "repo": "codeium.vim",
+        "rev": "573333355648b13063e79e58d3cea16f27bb7636",
+        "type": "github"
+      },
+      "original": {
+        "owner": "exafunction",
+        "repo": "codeium.vim",
+        "type": "github"
+      }
+    },
     "plugin-crates-nvim": {
       "flake": false,
       "locked": {
@@ -1097,6 +1113,7 @@
         "plugin-cmp-path": "plugin-cmp-path",
         "plugin-cmp-treesitter": "plugin-cmp-treesitter",
         "plugin-cmp-vsnip": "plugin-cmp-vsnip",
+        "plugin-codeium": "plugin-codeium",
         "plugin-crates-nvim": "plugin-crates-nvim",
         "plugin-dracula": "plugin-dracula",
         "plugin-dracula-nvim": "plugin-dracula-nvim",
