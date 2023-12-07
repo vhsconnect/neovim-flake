@@ -34,7 +34,21 @@ in
 
     vim.luaConfigRC.lsp-setup = /* lua */ ''
       vim.g.formatsave = ${boolToString cfg.formatOnSave};
-      -- vim.cmd [[autocmd! CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, { focus = false})]]
+      vim.cmd [[ autocmd! CursorHold,CursorHoldI ]]
+
+       function noFloatingWins()
+          for _, win in ipairs(vim.api.nvim_list_wins()) do
+              local width = vim.api.nvim_win_get_width(win)
+              local height = vim.api.nvim_win_get_height(win)
+              
+              if width > 0 and height > 0 then
+                  return true 
+              end
+
+          end
+          return false
+      end
+
 
       vim.diagnostic.config({
         underline = true,
@@ -50,15 +64,13 @@ in
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader><leader>D', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader><leader>d', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader><leader>t', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader><leader>gn', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader><leader>p', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader><leader>p', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '"', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
 
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lwa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lwr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>lwl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
 
-        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C><leader>', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader><leader>s', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
         vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader><leader>r', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
         vim.api.nvim_create_autocmd("CursorHold", {
@@ -72,7 +84,11 @@ in
               prefix = ' ',
               scope = 'cursor',
             }
-            -- vim.diagnostic.open_float(nil, opts)
+            local wins = vim.api.nvim_list_wins()
+
+            if noFloatingWins() then
+             vim.diagnostic.open_float(nil, opts)
+            end
           end
         })
       end
