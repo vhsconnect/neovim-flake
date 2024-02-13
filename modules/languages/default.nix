@@ -9,6 +9,7 @@ with lib; let
 in
 {
   imports = [
+    ./angular.nix
     ./bash.nix
     ./clang.nix
     ./css.nix
