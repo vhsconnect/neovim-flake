@@ -23,6 +23,7 @@ in
     ./plantuml.nix
     ./python.nix
     ./rust.nix
+    ./scala.nix
     ./sclang.nix
     ./sql.nix
     ./tailwindcss.nix
