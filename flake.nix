@@ -7,19 +7,10 @@
     nmd.url = "sourcehut:~rycee/nmd";
     nmd.flake = false;
 
-
-    # Language server (use master instead of nixpkgs)
-    rnix-lsp.url = "github:nix-community/rnix-lsp";
-    rnix-lsp.inputs.nixpkgs.follows = "flake-utils";
-    rnix-lsp.inputs.utils.follows = "flake-utils";
-
     nil.url = "github:oxalica/nil";
     nil.inputs.nixpkgs.follows = "nixpkgs";
     nil.inputs.flake-utils.follows = "flake-utils";
 
-    # Tidal cycles
-    tidalcycles.url = "github:mitchmindtree/tidalcycles.nix";
-    tidalcycles.inputs.vim-tidal-src.url = "github:tidalcycles/vim-tidal";
 
     ## Plugins (must begin with plugin-)
 
@@ -251,9 +242,6 @@
 
       nvimLib = (import ./modules/lib/stdlib-extended.nix nixpkgs.lib).nvim;
 
-      tidalConfig = {
-        config.vim.languages.tidal.enable = true;
-      };
 
       mainConfig = isMaximal:
         let
@@ -286,8 +274,6 @@
               plantuml.enable = overrideable isMaximal;
               bash.enable = overrideable isMaximal;
 
-              # See tidal config
-              tidal.enable = overrideable false;
             };
             vim.lsp = {
               formatOnSave = overrideable true;
@@ -337,7 +323,8 @@
               gitsigns.enable = overrideable true;
               gitsigns.codeActions = overrideable true;
             };
-            vim.plenary.enable = true;
+            # necessary?
+            #  vim.plenary.enable = true;
           };
         };
 
@@ -354,7 +341,6 @@
         inherit neovimConfiguration;
         neovim-nix = buildPkg prev [ nixConfig ];
         neovim-maximal = buildPkg prev [ maximalConfig ];
-        neovim-tidal = buildPkg prev [ tidalConfig ];
       };
     }
     // (flake-utils.lib.eachDefaultSystem (system:
@@ -362,11 +348,6 @@
       pkgs = import nixpkgs {
         inherit system;
         overlays = [
-          inputs.tidalcycles.overlays.default
-          (final: prev: {
-            rnix-lsp = inputs.rnix-lsp.defaultPackage.${system};
-            nil = inputs.nil.packages.${system}.default;
-          })
         ];
       };
 
@@ -375,7 +356,6 @@
         nmdSrc = inputs.nmd;
       };
 
-      tidalPkg = buildPkg pkgs [ tidalConfig ];
       nixPkg = buildPkg pkgs [ nixConfig ];
       maximalPkg = buildPkg pkgs [ maximalConfig ];
 
@@ -403,15 +383,11 @@
             program = nvimBin maximalPkg;
           };
           default = nix;
-        }
-        // pkgs.lib.optionalAttrs (!(builtins.elem system [ "aarch64-darwin" "x86_64-darwin" ])) {
-          tidal = {
-            type = "app";
-            program = nvimBin tidalPkg;
-          };
         };
 
-      devShells.default = pkgs.mkShell { nativeBuildInputs = [ devPkg ]; };
+      devShells.default = pkgs.mkShell {
+        nativeBuildInputs = [ devPkg ];
+      };
 
       packages =
         {
@@ -422,9 +398,7 @@
           nix = nixPkg;
           maximal = maximalPkg;
           develop = devPkg;
-        }
-        // pkgs.lib.optionalAttrs (!(builtins.elem system [ "aarch64-darwin" "x86_64-darwin" ])) {
-          tidal = tidalPkg;
         };
-    }));
+    }
+    ));
 }

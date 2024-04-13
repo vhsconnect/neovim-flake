@@ -28,7 +28,6 @@ in
     ./sql.nix
     ./tailwindcss.nix
     ./terraform.nix
-    ./tidal.nix
     ./ts.nix
     ./zig.nix
   ];
