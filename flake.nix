@@ -162,8 +162,6 @@
     plugin-dracula-nvim.url = "github:Mofiqul/dracula.nvim";
     plugin-dracula-nvim.flake = false;
 
-    plugin-oxocarbon.url = "github:nyoom-engineering/oxocarbon.nvim";
-    plugin-oxocarbon.flake = false;
 
     plugin-dracula.url = "github:dracula/vim";
     plugin-dracula.flake = false;

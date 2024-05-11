@@ -34,17 +34,17 @@ in
 
   config.vim.theme.supportedThemes = {
 
-    oxocarbon = {
-      setup = '' 
-      -- Oxocarbon theme
-     -- vim.opt.background = ${cfg.style}
-      vim.o.background = "${cfg.style}"
-      -- vim.opt.background = dark
-      vim.cmd.colorscheme "oxocarbon"
-      '';
-      defaultStyle = "dark";
-      styles = [ "dark" "light" ];
-    };
+    # oxocarbon = {
+    #   setup = '' 
+    #   -- Oxocarbon theme
+    #  -- vim.opt.background = ${cfg.style}
+    #   vim.o.background = "${cfg.style}"
+    #   -- vim.opt.background = dark
+    #   vim.cmd.colorscheme "oxocarbon"
+    #   '';
+    #   defaultStyle = "dark";
+    #   styles = [ "dark" "light" ];
+    # };
 
     onedark = {
       setup = ''
