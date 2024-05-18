@@ -33,6 +33,21 @@ in
     vim.autocomplete.sources = { "nvim_lsp" = "[LSP]"; };
 
     vim.luaConfigRC.lsp-setup = /* lua */ ''
+      vim.api.nvim_create_autocmd({ "ColorScheme" }, {
+        callback = function()
+          vim.api.nvim_set_hl(0, "DiagnosticFloatingError", {})
+          vim.api.nvim_set_hl(0, "DiagnosticFloatingWarn", {})
+          vim.api.nvim_set_hl(0, "DiagnosticFloatingInfo", {})
+          vim.api.nvim_set_hl(0, "DiagnosticFloatingHint", {})
+        end
+      })
+
+      vim.api.nvim_set_hl(0, "FloatBorder", {})
+      vim.api.nvim_set_hl(0,"DiagnosticFloatingError", {})
+      vim.api.nvim_set_hl(0,"DiagnosticFloatingWarn", {})
+      vim.api.nvim_set_hl(0,"DiagnosticFloatingHint", {})
+      vim.api.nvim_set_hl(0,"DiagnosticFloatingInfo", {})
+
       vim.g.formatsave = ${boolToString cfg.formatOnSave};
       vim.cmd [[ autocmd! CursorHold,CursorHoldI ]]
 
