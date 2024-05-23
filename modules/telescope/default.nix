@@ -123,6 +123,36 @@ in
       };
 
       vim.luaConfigRC.telescope = nvim.dag.entryAnywhere /* lua */ ''
+
+        local pickers = require "telescope.pickers"
+        local previewers = require "telescope.previewers"
+        local finders = require "telescope.finders"
+        local actions = require "telescope.actions"
+        local action_state = require "telescope.actions.state"
+        local make_entry = require("telescope.make_entry")
+        local conf = require("telescope.config").values
+        local utils = require "telescope.utils"
+
+
+        local git_command = utils.__git_command
+
+        local show = function(opts)
+          opts = { show_branch = true, entry_maker = false, git_command = {"git", "show", "--name-only","--pretty=format:", cwd = "bat" }}
+          opts.show_branch = vim.F.if_nil(opts.show_branch, true)
+          opts.entry_maker = make_entry.gen_from_file(opts)
+          opts.git_command = vim.F.if_nil(opts.git_command, {})
+          previewer = { value = "hello world" }
+
+          pickers
+            .new(opts, {
+              prompt_title = "Lately",
+              finder = finders.new_oneshot_job(opts.git_command, opts),
+              previewer = previewers.git_commit_diff_to_head.new(opts),
+              sorter = conf.file_sorter(opts),
+            })
+            :find()
+        end
+
         require("telescope").setup {
           defaults = {
             vimgrep_arguments = {
